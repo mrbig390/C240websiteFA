@@ -1036,19 +1036,19 @@ function renderScheduleTable() {
   sortedItems.forEach(item => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="table-time">${item.time}</td>
-      <td>
+      <td class="table-time" data-label="Time">${item.time}</td>
+      <td data-label="Event">
         <span class="table-title">${item.title}</span>
         ${item.notes ? `<span class="table-notes">${item.notes}</span>` : ''}
       </td>
-      <td>${item.category}</td>
-      <td><span class="table-priority-badge ${item.priority.toLowerCase()}">${item.priority}</span></td>
-      <td>
+      <td data-label="Category">${item.category}</td>
+      <td data-label="Priority"><span class="table-priority-badge ${item.priority.toLowerCase()}">${item.priority}</span></td>
+      <td data-label="Status">
         <span class="table-status-badge ${item.status}">
           ${item.status === 'completed' ? '✅ Completed' : '⏳ Pending'}
         </span>
       </td>
-      <td>
+      <td data-label="Actions">
         <div class="table-action-btns">
           <button class="action-btn edit" data-id="${item.id}" title="Edit">✏️</button>
           <button class="action-btn delete" data-id="${item.id}" title="Delete">🗑️</button>

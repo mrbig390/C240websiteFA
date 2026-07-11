@@ -1931,3 +1931,268 @@ button, input, select, textarea {
   padding: 40px 0;
   color: var(--text-muted);
 }
+
+/* ==================== RESPONSIVE MEDIA QUERIES ==================== */
+
+/* Tablet & Phone Viewports (< 768px) */
+@media (max-width: 768px) {
+  /* Global page padding adjustments */
+  #patient-view {
+    padding: 16px 16px 140px 16px;
+  }
+  
+  .panel-content-container {
+    padding: 16px;
+  }
+  
+  /* Patient Header Stack */
+  .patient-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 24px;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .date-time-container {
+    text-align: center;
+    border-top: 1px solid var(--bg-tertiary);
+    padding-top: 16px;
+  }
+  
+  .patient-greeting {
+    font-size: 1.8rem;
+  }
+  
+  .patient-time {
+    font-size: 2.2rem;
+  }
+  
+  .portal-lock-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Timetable / Plan List responsiveness */
+  .timeline-container::before {
+    left: 20px;
+  }
+  
+  .timeline-item {
+    gap: 12px;
+  }
+  
+  .timeline-time-col {
+    width: 44px;
+  }
+  
+  .timeline-time-badge {
+    font-size: 0.75rem;
+    padding: 4px 6px;
+  }
+  
+  .timeline-marker {
+    width: 16px;
+    height: 16px;
+    margin-top: 10px;
+  }
+  
+  .timeline-content-card {
+    padding: 16px;
+  }
+  
+  .timeline-content-card h3 {
+    font-size: 1.15rem;
+  }
+  
+  .timeline-notes {
+    font-size: 0.95rem;
+    padding: 8px 12px;
+  }
+  
+  .timeline-check-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  /* Mood Tracker buttons */
+  .mood-options {
+    gap: 8px;
+  }
+  
+  .mood-btn {
+    padding: 16px 8px;
+    gap: 6px;
+  }
+  
+  .mood-emoji {
+    font-size: 2.2rem;
+  }
+  
+  .mood-label {
+    font-size: 0.85rem;
+  }
+
+  /* Caregiver View Header Navigation */
+  .caregiver-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+    gap: 16px;
+    position: static; /* Let it flow on mobile for smoother scrolling */
+  }
+  
+  .caregiver-nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    white-space: nowrap;
+    scrollbar-width: none; /* Hide default scrollbar */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .caregiver-nav::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .nav-tab {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  
+  .exit-panel-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Responsive Table ➔ Card conversion for Event Schedule */
+  .schedule-table thead {
+    display: none; /* Hide headings */
+  }
+  
+  .schedule-table, 
+  .schedule-table tbody, 
+  .schedule-table tr, 
+  .schedule-table td {
+    display: block;
+    width: 100%;
+  }
+  
+  .schedule-table tr {
+    background: var(--bg-secondary);
+    margin-bottom: 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .schedule-table td {
+    padding: 8px 0;
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    text-align: right;
+  }
+  
+  .schedule-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    float: left;
+    text-align: left;
+  }
+  
+  .table-notes {
+    max-width: 180px;
+    text-align: right;
+    white-space: normal;
+    display: inline-block;
+  }
+  
+  .table-action-btns {
+    justify-content: flex-end;
+  }
+
+  /* Settings panel grid adjustment */
+  .settings-form-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-group-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  /* Modal responsive sizes */
+  .modal-card, .auth-card {
+    width: 92%;
+    padding: 24px 20px;
+  }
+  
+  .modal-form {
+    padding: 16px;
+  }
+
+  /* SOS button bottom padding adjustments */
+  .sos-footer {
+    padding: 16px;
+  }
+  
+  .sos-btn {
+    height: 80px;
+  }
+  
+  .sos-text {
+    font-size: 1.4rem;
+  }
+  
+  .sos-subtext {
+    font-size: 0.85rem;
+  }
+  
+  .sos-icon-pulse {
+    left: 20px;
+    font-size: 1.8rem;
+  }
+
+  /* Dial Simulator Overlay Card */
+  .call-card {
+    padding: 32px 20px;
+  }
+}
+
+/* Small mobile devices (< 480px) */
+@media (max-width: 480px) {
+  /* Force memory lane contacts visual grid to stack */
+  .memory-lane-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .caregiver-contacts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Auth PIN Pad key sizes */
+  .pin-key {
+    width: 60px;
+    height: 60px;
+    font-size: 1.4rem;
+  }
+  
+  .action-key {
+    height: 60px;
+  }
+
+  /* Section header icon alignment spacing */
+  .section-header h2 {
+    font-size: 1.3rem;
+  }
+}
