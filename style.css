@@ -200,6 +200,31 @@ button, input, select, textarea {
   color: var(--text-on-dark);
 }
 
+/* Patient header logo row */
+.patient-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.patient-logo-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+/* Auth PIN screen logo */
+.auth-logo-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: var(--shadow-md);
+}
+
 /* Patient Dashboard Grid Layout */
 .patient-dashboard-grid {
   display: grid;

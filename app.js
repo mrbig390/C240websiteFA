@@ -191,6 +191,7 @@ function saveState() {
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
+  cleanupOldSheetTasks(); // Remove past-day Google Sheet tasks before rendering
   initTimeDate();
   initViewSwitching();
   initPINPad();
@@ -200,6 +201,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // Auto-sync from Google Sheet on every page load
   syncFromGoogleSheet();
 });
+
+// Remove any Google Sheet-synced tasks that belong to a previous day.
+// Called on every page load so the timetable always starts fresh.
+function cleanupOldSheetTasks() {
+  const d = new Date();
+  const todayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  const before = state.schedule.length;
+
+  state.schedule = state.schedule.filter(item => {
+    // Only clean up tasks that were synced from Google Sheet (id starts with 'gs_')
+    if (!item.id || !item.id.startsWith('gs_')) return true;
+
+    // Extract the date from the notes field ("Synced from Google Sheet for YYYY-MM-DD")
+    const match = item.notes && item.notes.match(/(\d{4}-\d{2}-\d{2})$/);
+    if (!match) return true; // Keep if we can't parse a date
+
+    const taskDate = match[1];
+    return taskDate === todayStr; // Remove if it's not today
+  });
+
+  if (state.schedule.length < before) {
+    saveState();
+  }
+}
 
 // ==================== GOOGLE SHEET LIVE SYNC ====================
 // Reads today's tasks from the public Google Sheet CSV export
@@ -290,7 +316,11 @@ window.handleGoogleSheetSyncCallback = function(data) {
         const cell = cells[idx];
         let val = '';
         if (cell) {
-          if (cell.f !== undefined && cell.f !== null) {
+          // For date columns, convert Google Sheets serial number directly
+          // to avoid timezone shift issues from new Date()
+          if (header === 'task_date' && typeof cell.v === 'number') {
+            val = googleSheetSerialToDate(cell.v);
+          } else if (cell.f !== undefined && cell.f !== null) {
             val = String(cell.f);
           } else if (cell.v !== undefined && cell.v !== null) {
             val = String(cell.v);
@@ -401,6 +431,18 @@ function parseCSV(text) {
   return rows;
 }
 
+// Convert Google Sheets serial date number to YYYY-MM-DD (no timezone shift)
+// Google Sheets epoch starts Dec 30, 1899
+function googleSheetSerialToDate(serial) {
+  const epoch = new Date(1899, 11, 30); // Dec 30, 1899 local time
+  const ms = serial * 86400 * 1000;
+  const d = new Date(epoch.getTime() + ms);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 // Normalise various date formats to YYYY-MM-DD
 function normaliseDate(raw) {
   if (!raw) return '';
@@ -409,10 +451,32 @@ function normaliseDate(raw) {
   // Already YYYY-MM-DD
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
 
-  // Try parsing via Date
-  const d = new Date(s);
+  // M/D/YYYY or MM/DD/YYYY (common US locale formatted output from Google Sheets)
+  const mdyMatch = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (mdyMatch) {
+    const month = String(mdyMatch[1]).padStart(2, '0');
+    const day = String(mdyMatch[2]).padStart(2, '0');
+    return `${mdyMatch[3]}-${month}-${day}`;
+  }
+
+  // D/M/YYYY (common for Singapore / Asia locales)
+  // We assume same regex but swap day/month — handled by normaliseDate caller context
+  // Try ISO parse as fallback (avoids UTC shift by using local noon)
+  const parts = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+  if (parts) {
+    const year = parts[3].length === 2 ? '20' + parts[3] : parts[3];
+    const month = String(parts[1]).padStart(2, '0');
+    const day = String(parts[2]).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  // Last resort: parse via Date at local noon to avoid midnight UTC rollback
+  const d = new Date(s + 'T12:00:00');
   if (!isNaN(d.getTime())) {
-    return d.toISOString().split('T')[0];
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   return '';

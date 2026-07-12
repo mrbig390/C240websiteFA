@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Forget-Me-Not - Care Assistant</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
   <!-- Google Fonts for ultimate readability and style -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,9 +34,14 @@
       <!-- Patient Header -->
       <header class="patient-header">
         <div class="header-main">
-          <div class="greeting-container">
-            <span class="greeting-tag">Hello Austin, welcome back</span>
-            <h1 id="patient-greeting" class="patient-greeting">Good Morning, Austin</h1>
+        <div class="greeting-container">
+            <div class="patient-header-logo">
+              <img src="assets/logo.png" alt="Forget-Me-Not" class="patient-logo-img">
+              <div>
+                <span class="greeting-tag">Hello Austin, welcome back</span>
+                <h1 id="patient-greeting" class="patient-greeting">Good Morning, Austin</h1>
+              </div>
+            </div>
           </div>
           <div class="date-time-container">
             <div id="patient-time" class="patient-time">08:00 AM</div>
@@ -133,7 +139,9 @@
       <div class="auth-card">
         <button id="btn-close-auth" class="close-auth-btn">&times;</button>
         <div class="auth-header">
-          <div class="auth-icon">🔒</div>
+          <div class="auth-icon">
+            <img src="assets/logo.png" alt="Forget-Me-Not" class="auth-logo-img">
+          </div>
           <h2>Caregiver Portal</h2>
           <p>Please enter the security PIN to gain access</p>
         </div>
@@ -573,7 +581,17 @@
 
   <!-- ========== BOTPRESS WEBCHAT EMBED ========== -->
   <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
-  <script src="https://files.bpcontent.cloud/2026/07/09/08/20260709085841-9635EBEF.js" defer></script>
+  <script>
+    window.botpress = window.botpress || {};
+    window.botpress.init = window.botpress.init || function() {
+      (window.botpress.q = window.botpress.q || []).push(arguments);
+    };
+    window.botpress.init({
+      "botId": "687f8365-d5c7-4838-b292-d84214236ecd",
+      "clientId": "fa9312cb-6063-4013-8011-229b0731e5aa",
+      "configUrl": "https://files.bpcontent.cloud/2026/07/09/08/20260709085841-5LNU7XZV.json"
+    });
+  </script>
   <script>
     // Wipe ALL Botpress localStorage entries so no hidden state persists
     try {
